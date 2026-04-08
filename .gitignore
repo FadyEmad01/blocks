@@ -50,3 +50,5 @@ public/rss.xml
 .cursor
 .vscode
 CLAUDE.md
+
+.mcp.json
