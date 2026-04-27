@@ -1,4 +1,3 @@
-import { IconChevronLeft } from '@tabler/icons-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -113,23 +112,20 @@ export default async function Page({ params }: PageProps) {
         }))}
       />
       <div className="flex flex-col">
-        <div className="my-10 flex flex-col items-center justify-center space-y-2">
+        <div className="flex flex-col gap-3 pt-4 pb-8">
           <Link
-            className="flex items-center gap-0.5 text-muted-foreground text-sm"
+            className="font-medium text-sm text-zinc-500 transition-colors hover:text-foreground"
             href="/"
           >
-            <IconChevronLeft className="size-5 text-[#A6A6A6] " />
-            <span className="font-medium text-[#A6A6A6] text-base">
-              Back to blocks
-            </span>
+            All blocks
           </Link>
 
-          <h1 className="font-bold text-3xl/[1.1] tracking-tight sm:text-4xl/[1.1] md:text-5xl/[1.1]">
+          <h1 className="text-balance font-semibold text-3xl tracking-tight sm:text-4xl md:text-5xl">
             {blocks.name}
           </h1>
         </div>
 
-        <div className="mt-0 overflow-hidden px-px pb-px">
+        <div className="overflow-hidden px-px pb-px">
           {blocks.blocksData?.map((block) => (
             <Block
               blocksCategory={block.blocksCategory}

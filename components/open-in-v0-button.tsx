@@ -1,14 +1,12 @@
 'use client';
 
-import posthog from 'posthog-js';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export function OpenInV0Button({
   name,
-  category,
   className,
-}: { name: string; category: string } & React.ComponentProps<typeof Button>) {
+}: { name: string } & React.ComponentProps<typeof Button>) {
   return (
     <Button
       aria-label="Open in v0"
@@ -23,19 +21,13 @@ export function OpenInV0Button({
         href={`https://v0.dev/chat/api/open?url=${
           process.env.NEXT_PUBLIC_BASE_URL || 'https://blocks.so'
         }/r/${name}.json`}
-        onClick={() => {
-          posthog.capture('cta_clicked', {
-            block_id: name,
-            category_id: category,
-          });
-        }}
         rel="noreferrer"
         target="_blank"
       >
         Open in{' '}
         <svg
           aria-hidden="true"
-          className="h-5 w-5 text-current"
+          className="size-5 text-current"
           fill="none"
           viewBox="0 0 40 20"
           xmlns="http://www.w3.org/2000/svg"

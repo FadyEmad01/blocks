@@ -1,14 +1,12 @@
 'use client';
 
-import posthog from 'posthog-js';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export function OpenInPlaygroundButton({
   name,
-  category,
   className,
-}: { name: string; category: string } & React.ComponentProps<typeof Button>) {
+}: { name: string } & React.ComponentProps<typeof Button>) {
   return (
     <Button
       aria-label="Open in shadcn playground"
@@ -23,19 +21,13 @@ export function OpenInPlaygroundButton({
         href={`https://play.blocks.so/api/open?url=${
           process.env.NEXT_PUBLIC_BASE_URL || 'https://blocks.so'
         }/r/${name}.json`}
-        onClick={() => {
-          posthog.capture('playground_cta_clicked', {
-            block_id: name,
-            category_id: category,
-          });
-        }}
         rel="noreferrer"
         target="_blank"
       >
         Open in{' '}
         <svg
           aria-hidden="true"
-          className="h-4 w-4 text-current"
+          className="size-4 text-current"
           viewBox="0 0 256 256"
           xmlns="http://www.w3.org/2000/svg"
         >

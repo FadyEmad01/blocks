@@ -118,18 +118,18 @@ export default async function BlockPage({ params }: Params) {
         categoryName={category.name}
       />
 
-      <article className="mx-auto w-full max-w-4xl py-6 md:py-10">
+      <article className="py-6 md:py-10">
         <div className="space-y-4">
           <Link
-            className="text-muted-foreground text-sm underline-offset-4 hover:underline"
+            className="font-medium text-sm text-zinc-500 transition-colors hover:text-foreground"
             href={`/${blocksCategory}`}
           >
             Back to {category.name}
           </Link>
-          <h1 className="font-bold text-3xl tracking-tight md:text-5xl">
+          <h1 className="text-balance font-semibold text-3xl tracking-tight md:text-5xl">
             {block.name}
           </h1>
-          <p className="text-base text-muted-foreground md:text-lg">
+          <p className="text-pretty text-base text-zinc-500 md:text-lg">
             Free {category.name.toLowerCase()} component built with shadcn/ui,
             React, Tailwind CSS, and Next.js. Use it as a copy-paste block or
             add it directly from the blocks registry.
@@ -149,12 +149,12 @@ export default async function BlockPage({ params }: Params) {
           </Button>
         </div>
 
-        <section className="mt-10 rounded-xl border bg-muted/20 p-6">
+        <section className="mt-10 rounded-2xl bg-zinc-50 p-6 ring-1 ring-black/5">
           <h2 className="font-semibold text-xl">Install this block</h2>
           <p className="mt-2 text-muted-foreground text-sm">
             Add this block to your project with the shadcn CLI.
           </p>
-          <pre className="mt-4 overflow-x-auto rounded-md border bg-background px-4 py-3 text-sm">
+          <pre className="mt-4 overflow-x-auto rounded-xl bg-white px-4 py-3 text-sm ring-1 ring-black/5">
             <code>{`npx shadcn@latest add @blocks-so/${block.blocksId}`}</code>
           </pre>
         </section>
@@ -166,7 +166,7 @@ export default async function BlockPage({ params }: Params) {
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {relatedBlocks.map((related) => (
               <Link
-                className="rounded-lg border bg-background p-4 transition-colors hover:bg-muted/30"
+                className="rounded-xl bg-zinc-50 p-4 ring-1 ring-black/5 transition-all duration-200 hover:shadow-md hover:shadow-zinc-200/50 hover:ring-black/10"
                 href={`/${blocksCategory}/${related.blocksId}`}
                 key={related.blocksId}
               >

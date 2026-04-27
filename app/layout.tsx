@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import Script from 'next/script';
 import { ThemeProvider } from 'next-themes';
-import { PostHogProvider } from '@/app/providers/posthog-provider';
 import { SeoJsonLd } from '@/components/seo-jsonld';
 import { TailwindIndicator } from '@/components/tailwind-indicator';
 import { Toaster } from '@/components/ui/sonner';
@@ -156,23 +155,21 @@ export default function RootLayout({
         className={cn(fontSans.variable, fontMono.variable, 'antialiased')}
         suppressHydrationWarning
       >
-        <PostHogProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            disableTransitionOnChange
-            enableSystem={false}
-            forcedTheme="light"
-          >
-            <TooltipProvider delayDuration={0}>
-              {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          disableTransitionOnChange
+          enableSystem={false}
+          forcedTheme="light"
+        >
+          <TooltipProvider delayDuration={0}>
+            {children}
 
-              <TailwindIndicator />
-              <Toaster />
-              <SeoJsonLd />
-            </TooltipProvider>
-          </ThemeProvider>
-        </PostHogProvider>
+            <TailwindIndicator />
+            <Toaster />
+            <SeoJsonLd />
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

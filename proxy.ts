@@ -1,9 +1,7 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { blocksMetadata } from "./content/blocks-metadata";
+import { type NextRequest, NextResponse } from 'next/server';
+import { blocksMetadata } from './content/blocks-metadata';
 
-const blockToCategory = new Map(
-  blocksMetadata.map((b) => [b.id, b.category])
-);
+const blockToCategory = new Map(blocksMetadata.map((b) => [b.id, b.category]));
 
 export function proxy(request: NextRequest) {
   const slug = request.nextUrl.pathname.slice(1);
@@ -16,7 +14,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next|api|r|blocks|ingest|favicon\\.ico|.*\\..*).*)",
-  ],
+  matcher: ['/((?!_next|api|r|blocks|favicon\\.ico|.*\\..*).*)'],
 };

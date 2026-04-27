@@ -2,7 +2,6 @@
 'use client';
 
 import { CheckIcon, CopyIcon } from 'lucide-react';
-import posthog from 'posthog-js';
 import type * as React from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -79,9 +78,6 @@ export function RegistrySetup({
             className="absolute top-4 right-4 z-10 size-8 rounded-md bg-background"
             onClick={() => {
               copyToClipboard(registrySetupCode);
-              posthog.capture('snippet_copied', {
-                snippet_type: 'registry_config',
-              });
             }}
             size="icon"
             variant="outline"
