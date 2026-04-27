@@ -1,28 +1,28 @@
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { IconSquareRoundedFilled } from "@tabler/icons-react";
-import Link from "next/link";
-import { RegistrySetup } from "./registry-setup";
-import { siteConfig } from "@/config";
+import { IconSquareRoundedFilled } from '@tabler/icons-react';
+import Link from 'next/link';
+import { buttonVariants } from '@/components/ui/button';
+import { siteConfig } from '@/config';
+import { cn } from '@/lib/utils';
+import { RegistrySetup } from './registry-setup';
 
 export function Header() {
   return (
     <div className="sticky top-0 z-40 bg-background/80 backdrop-blur-md">
       {/* border-border border-r border-l border-dotted */}
       <div className="mx-auto flex max-w-(--breakpoint-xl) items-center justify-between px-4 sm:px-8">
-        <Link className="flex items-center space-x-1 py-5" href="/">
+        <Link className="flex items-center gap-1.5 py-5" href="/">
           <IconSquareRoundedFilled />
 
-          <h1 className="font-semibold text-xl">blocks</h1>
+          <h1 className="font-medium text-lg tracking-tight">blocks</h1>
         </Link>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-4">
           <RegistrySetup />
 
           <a
             className={cn(
-              buttonVariants({ variant: "default" }),
-              "rounded-xl text-base"
+              buttonVariants({ variant: 'default' }),
+              'rounded-lg text-sm'
             )}
             data-umami-event="View GitHub Repository"
             href={siteConfig.links.github}
