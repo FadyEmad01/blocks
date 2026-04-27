@@ -3,8 +3,7 @@
 import type { SupportedLanguages } from '@pierre/diffs/react';
 import { Fullscreen, Monitor, Smartphone, Tablet } from 'lucide-react';
 import Link from 'next/link';
-import posthog from 'posthog-js';
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useRef, useState } from 'react';
 import type { PanelImperativeHandle } from 'react-resizable-panels';
 import { OpenInPlaygroundButton } from '@/components/open-in-playground-button';
 import { OpenInV0Button } from '@/components/open-in-v0-button';
@@ -44,18 +43,7 @@ export const Block = ({
   });
 
   const resizablePanelRef = useRef<PanelImperativeHandle>(null);
-  const hasTrackedPreview = useRef(false);
   const iframeHeight = meta?.iframeHeight ?? '930px';
-
-  useEffect(() => {
-    if (state.view === 'preview' && !hasTrackedPreview.current) {
-      hasTrackedPreview.current = true;
-      posthog.capture('block_preview_opened', {
-        block_id: blocksId,
-        category_id: blocksCategory,
-      });
-    }
-  }, [state.view, blocksId, blocksCategory]);
 
   const getCleanCode = (rawCode: string | ReactNode): string => {
     const cleanCode = typeof rawCode === 'string' ? rawCode : '';
@@ -107,14 +95,6 @@ export const Block = ({
 
   const handleViewChange = (value: string) => {
     setState((prev) => ({ ...prev, view: value as 'preview' | 'code' }));
-
-    if (value === 'preview' && !hasTrackedPreview.current) {
-      hasTrackedPreview.current = true;
-      posthog.capture('block_preview_opened', {
-        block_id: blocksId,
-        category_id: blocksCategory,
-      });
-    }
   };
 
   const handleSizeChange = (value: string) => {
@@ -145,119 +125,112 @@ export const Block = ({
 
   return (
     <div
-      className="my-24 first:mt-8"
+      className="mt-16 first:mt-0"
       data-view={state.view}
       id={blocksId}
       style={{ '--height': iframeHeight } as React.CSSProperties}
     >
-      <div className="">
-        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
-          <div className="flex cursor-pointer items-center gap-4 font-medium text-foreground sm:text-lg">
-            <Link
-              className="font-semibold text-base underline-offset-2 hover:underline"
-              href={`/${blocksCategory}/${blocksId}`}
-            >
-              {name}
-            </Link>
-          </div>
-          <div className="flex flex-wrap items-center gap-2 sm:gap-0">
-            <Tabs
-              className="hidden lg:flex"
-              onValueChange={handleViewChange}
-              value={state.view}
-            >
-              <TabsList className="h-8 items-center rounded-lg px-[calc(--spacing(1)-2px)] dark:border dark:bg-background dark:text-foreground">
-                <TabsTrigger
-                  className="h-7 rounded-md px-2 "
-                  data-umami-event="View Block Preview"
-                  value="preview"
-                >
-                  Preview
-                </TabsTrigger>
-                <TabsTrigger
-                  className="h-7 rounded-md px-2"
-                  data-umami-event="View Block Code"
-                  value="code"
-                >
-                  Code
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-            <Separator
-              className="mx-2 hidden h-4 lg:flex"
-              orientation="vertical"
-            />
-            <div className="ml-auto hidden h-8 items-center gap-1.5 rounded-md border p-0.5 shadow-none lg:flex">
-              <ToggleGroup
-                className="gap-0.5"
-                onValueChange={(value) => {
-                  handleSizeChange(value);
-                }}
-                type="single"
-                value={state.size}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Link
+          className="font-medium text-[0.9375rem] text-foreground tracking-tight underline-offset-2 hover:underline"
+          href={`/${blocksCategory}/${blocksId}`}
+        >
+          {name}
+        </Link>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          <Tabs
+            className="hidden lg:flex"
+            onValueChange={handleViewChange}
+            value={state.view}
+          >
+            <TabsList className="h-8 rounded-lg">
+              <TabsTrigger
+                className="h-7 rounded-md px-2.5"
+                data-umami-event="View Block Preview"
+                value="preview"
               >
-                <ToggleGroupItem
-                  className="h-[25px] w-[25px] min-w-0 rounded-sm p-0"
-                  data-umami-event="Set Preview Desktop"
-                  title="Desktop"
-                  value="desktop"
-                >
-                  <Monitor className="h-4 w-4" />
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  className="h-[25px] w-[25px] min-w-0 rounded-sm p-0"
-                  data-umami-event="Set Preview Tablet"
-                  title="Tablet"
-                  value="tablet"
-                >
-                  <Tablet className="h-4 w-4" />
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  className="h-[25px] w-[25px] min-w-0 rounded-sm p-0"
-                  data-umami-event="Set Preview Mobile"
-                  title="Mobile"
-                  value="mobile"
-                >
-                  <Smartphone className="h-4 w-4" />
-                </ToggleGroupItem>
-                <Separator className="h-4.5" orientation="vertical" />
-                <Button
-                  asChild
-                  className="h-[25px] w-[25px] rounded-sm p-0"
-                  data-umami-event="Open Block Fullscreen Preview"
-                  size="icon"
-                  title="Open in New Tab"
-                  variant="ghost"
-                >
-                  <Link href={`/blocks/preview/${blocksId}`} target="_blank">
-                    <span className="sr-only">Open in New Tab</span>
-                    <Fullscreen className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </ToggleGroup>
-            </div>
-            <Separator
-              className="mx-1 hidden h-4 md:flex"
-              orientation="vertical"
-            />
+                Preview
+              </TabsTrigger>
+              <TabsTrigger
+                className="h-7 rounded-md px-2.5"
+                data-umami-event="View Block Code"
+                value="code"
+              >
+                Code
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
 
-            <div className="flex items-center gap-1">
-              <AddCommand category={blocksCategory} name={blocksId} />
-            </div>
+          <div className="ml-auto hidden h-8 items-center gap-0.5 rounded-lg bg-zinc-50 p-1 ring-1 ring-black/5 lg:flex">
+            <ToggleGroup
+              className="gap-0.5"
+              onValueChange={(value) => {
+                handleSizeChange(value);
+              }}
+              type="single"
+              value={state.size}
+            >
+              <ToggleGroupItem
+                className="size-6 min-w-0 rounded-md p-0"
+                data-umami-event="Set Preview Desktop"
+                title="Desktop"
+                value="desktop"
+              >
+                <Monitor className="size-3.5" />
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                className="size-6 min-w-0 rounded-md p-0"
+                data-umami-event="Set Preview Tablet"
+                title="Tablet"
+                value="tablet"
+              >
+                <Tablet className="size-3.5" />
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                className="size-6 min-w-0 rounded-md p-0"
+                data-umami-event="Set Preview Mobile"
+                title="Mobile"
+                value="mobile"
+              >
+                <Smartphone className="size-3.5" />
+              </ToggleGroupItem>
+            </ToggleGroup>
 
-            <Separator
-              className="mx-1 hidden h-4 xl:flex"
-              orientation="vertical"
-            />
-            <div className="flex items-center gap-2">
-              {meta?.type === 'file' && (
-                <OpenInPlaygroundButton
-                  category={blocksCategory}
-                  name={blocksId}
-                />
-              )}
-              <OpenInV0Button category={blocksCategory} name={blocksId} />
-            </div>
+            <Separator className="h-4" orientation="vertical" />
+
+            <Button
+              asChild
+              className="size-6 rounded-md p-0"
+              data-umami-event="Open Block Fullscreen Preview"
+              size="icon"
+              title="Open in New Tab"
+              variant="ghost"
+            >
+              <Link href={`/blocks/preview/${blocksId}`} target="_blank">
+                <span className="sr-only">Open in New Tab</span>
+                <Fullscreen className="size-3.5" />
+              </Link>
+            </Button>
+          </div>
+
+          <Separator
+            className="mx-0.5 hidden h-4 md:flex"
+            orientation="vertical"
+          />
+
+          <AddCommand name={blocksId} />
+
+          <Separator
+            className="mx-0.5 hidden h-4 xl:flex"
+            orientation="vertical"
+          />
+
+          <div className="flex items-center gap-1.5">
+            {meta?.type === 'file' && (
+              <OpenInPlaygroundButton name={blocksId} />
+            )}
+            <OpenInV0Button name={blocksId} />
           </div>
         </div>
       </div>
@@ -271,17 +244,20 @@ export const Block = ({
                 orientation="horizontal"
               >
                 <ResizablePanel
-                  className="relative rounded-lg border border-accent bg-background"
+                  className="relative"
                   defaultSize={100}
                   minSize={30}
                   panelRef={resizablePanelRef}
                 >
-                  <iframe
-                    className="relative z-20 w-full bg-background"
-                    height={meta?.iframeHeight ?? 930}
-                    src={`/blocks/preview/${blocksId}`}
-                    title={`${name} preview`}
-                  />
+                  <div className="h-full overflow-hidden rounded-2xl ring-1 ring-black/5">
+                    <iframe
+                      className="relative z-20 w-full bg-background"
+                      height={meta?.iframeHeight ?? 930}
+                      loading="lazy"
+                      src={`/blocks/preview/${blocksId}`}
+                      title={`${name} preview`}
+                    />
+                  </div>
                 </ResizablePanel>
                 <ResizableHandle className="after:-translate-y-1/2 after:-translate-x-px relative hidden w-3 bg-transparent p-0 after:absolute after:top-1/2 after:right-0 after:h-8 after:w-[6px] after:rounded-full after:bg-border after:transition-all after:hover:h-10 md:block" />
                 <ResizablePanel defaultSize={0} minSize={0} />
@@ -293,8 +269,6 @@ export const Block = ({
         {state.view === 'code' && meta?.type === 'file' && (
           <div className="group-data-[view=preview]/block-view-wrapper:hidden">
             <SingleFileCodeView
-              blockId={blocksId}
-              categoryId={blocksCategory}
               code={activeSingleFileCode.code}
               fileName={activeSingleFileCode.fileName}
               language={activeSingleFileCode.language}
@@ -304,12 +278,7 @@ export const Block = ({
 
         {state.view === 'code' && meta?.type === 'directory' && (
           <div className="overflow-auto rounded-lg group-data-[view=preview]/block-view-wrapper:hidden md:h-(--height)">
-            <CodeBlockEditor
-              blockId={blocksId}
-              blockTitle={name}
-              categoryId={blocksCategory}
-              fileTree={fileTree ?? []}
-            />
+            <CodeBlockEditor blockTitle={name} fileTree={fileTree ?? []} />
           </div>
         )}
       </div>
