@@ -3,11 +3,12 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BlockJsonLd } from '@/components/block-jsonld';
 import { BreadcrumbJsonLd } from '@/components/breadcrumb-jsonld';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config';
 import { blocksCategoriesMetadata } from '@/content/blocks-categories';
 import { blocksMetadata } from '@/content/blocks-metadata';
 import { getBlocks } from '@/lib/blocks';
+import { cn } from '@/lib/utils';
 
 type Params = {
   params: Promise<{
@@ -137,16 +138,19 @@ export default async function BlockPage({ params }: Params) {
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button asChild>
-            <Link href={`/${blocksCategory}#${block.blocksId}`}>
-              Preview in category
-            </Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href={`/preview/${block.blocksId}`} target="_blank">
-              Open full preview
-            </Link>
-          </Button>
+          <Link
+            className={cn(buttonVariants())}
+            href={`/${blocksCategory}#${block.blocksId}`}
+          >
+            Preview in category
+          </Link>
+          <Link
+            className={cn(buttonVariants({ variant: 'outline' }))}
+            href={`/preview/${block.blocksId}`}
+            target="_blank"
+          >
+            Open full preview
+          </Link>
         </div>
 
         <section className="mt-10 rounded-2xl bg-zinc-50 p-6 ring-1 ring-black/5">

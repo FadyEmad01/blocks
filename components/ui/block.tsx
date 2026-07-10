@@ -14,8 +14,9 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
 import type { BlocksProps } from '@/lib/blocks';
+import { cn } from '@/lib/utils';
 import { AddCommand } from '../add-command';
-import { Button } from './button';
+import { buttonVariants } from './button';
 import { Separator } from './separator';
 import { Tabs, TabsList, TabsTrigger } from './tabs';
 import { ToggleGroup, ToggleGroupItem } from './toggle-group';
@@ -117,16 +118,16 @@ export const Block = ({
       if (resizablePanelRef?.current) {
         switch (value) {
           case 'desktop':
-            resizablePanelRef.current.resize(100);
+            resizablePanelRef.current.resize('100%');
             break;
           case 'tablet':
-            resizablePanelRef.current.resize(60);
+            resizablePanelRef.current.resize('60%');
             break;
           case 'mobile':
-            resizablePanelRef.current.resize(30);
+            resizablePanelRef.current.resize('30%');
             break;
           default:
-            resizablePanelRef.current.resize(100);
+            resizablePanelRef.current.resize('100%');
             break;
         }
       }
@@ -176,10 +177,12 @@ export const Block = ({
             <ToggleGroup
               className="gap-0.5"
               onValueChange={(value) => {
-                handleSizeChange(value);
+                const size = value[0];
+                if (size) {
+                  handleSizeChange(size);
+                }
               }}
-              type="single"
-              value={state.size}
+              value={[state.size]}
             >
               <ToggleGroupItem
                 className="size-6 min-w-0 rounded-md p-0"
@@ -209,19 +212,19 @@ export const Block = ({
 
             <Separator className="h-4" orientation="vertical" />
 
-            <Button
-              asChild
-              className="size-6 rounded-md p-0"
+            <Link
+              className={cn(
+                buttonVariants({ variant: 'ghost', size: 'icon' }),
+                'size-6 rounded-md p-0'
+              )}
               data-umami-event="Open Block Fullscreen Preview"
-              size="icon"
+              href={`/preview/${blocksId}`}
+              target="_blank"
               title="Open in New Tab"
-              variant="ghost"
             >
-              <Link href={`/preview/${blocksId}`} target="_blank">
-                <span className="sr-only">Open in New Tab</span>
-                <Fullscreen className="size-3.5" />
-              </Link>
-            </Button>
+              <span className="sr-only">Open in New Tab</span>
+              <Fullscreen className="size-3.5" />
+            </Link>
           </div>
 
           <Separator
